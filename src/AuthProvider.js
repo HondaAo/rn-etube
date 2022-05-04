@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import gql from 'graphql-tag';
 import { useMutation } from 'react-apollo';
 import { AsyncStorage } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
 
 export const AuthContext = React.createContext();
 
@@ -34,6 +35,7 @@ export const AuthProvider = ({children}) => {
     const [ user, setUser ] = useState(null)
     const [ like, setLike ] = useState([])
     const [ voca, setVoca ] = useState([])
+    const [ guide, setGuide ] = useState(false)
     let list = []
     let vocaList = []
     return (
@@ -44,6 +46,8 @@ export const AuthProvider = ({children}) => {
             setLike,
             voca,
             setVoca,
+            guide,
+            setGuide,
             login: (input) => {
                 const data = useMutation(LOGIN_USER, { variables: input })
                 setUser(data)
@@ -54,6 +58,7 @@ export const AuthProvider = ({children}) => {
                 AsyncStorage.setItem('user', JSON.stringify(input)).then(json => console.log(json)).catch(error => console.log('error!'));
                 AsyncStorage.setItem('myvideo', JSON.stringify([1,2])).then(json => console.log(json)).catch(error => console.log('error!'))
                 AsyncStorage.setItem('voca', JSON.stringify([])).then(json => console.log(json)).catch(err => console.log(err))
+                setGuide(true)
             },
             likeVideo: (id) => {
                 AsyncStorage.getItem('myvideo').then(req => { setLike(JSON.parse(req))}).catch(error => console.log('error!'));
@@ -77,8 +82,9 @@ export const AuthProvider = ({children}) => {
                 AsyncStorage.setItem('voca', JSON.stringify(listingWord)).then(json => console.log('success!')).catch(error => console.log('error!'));
             },
             logout: () => {
-                AsyncStorage.removeItem('user')
                 setUser(null)
+                AsyncStorage.removeItem('user')
+                
             }
         }}>
             {children}

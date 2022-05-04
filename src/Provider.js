@@ -7,7 +7,7 @@ import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
 const client = new ApolloClient({
-    link: createHttpLink({ uri: 'https://etubeapp.herokuapp.com/graphql' }),
+    link: createHttpLink({ uri: 'http://ec2-44-192-88-13.compute-1.amazonaws.com/graphql' }),
     cache: new InMemoryCache()
 });
 

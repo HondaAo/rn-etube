@@ -45,7 +45,7 @@ const User = () => {
        AsyncStorage.getItem('user').then(json => setUser(JSON.parse(json))).catch((err) => console.log('error')) 
        AsyncStorage.getItem('myvideo').then(res => { setLike(JSON.parse(res)) }).catch(error => console.log('error!'));
        AsyncStorage.getItem('voca').then(res => { setVoca(JSON.parse(res)) }).catch(error => console.log('error!'));
-    },[refresh])
+    },[])
     const { data: likeData, loading, error } = useQuery(FETCH_VIDEOS, {
       variables: { show: 3, ids: like.join() }
     }) 
@@ -107,7 +107,7 @@ const User = () => {
            }}>
            <Icon name="user" size={40} color="white"　style={{ marginRight: 20, marginTop: 10}} />
            <View>
-            <Text style={{ fontSize: 23, color: 'white'}}>{user.username ? user.username : "Normal Account" }</Text>
+            <Text style={{ fontSize: 23, color: 'white'}}>{user.username ? user.username : "Normal Account"}</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center'}}>
             <Text style={{ fontSize: 12, color: 'white'}}>password: </Text>
            { !show ?  <Text style={{ fontSize: 12, color: 'white', marginRight: 4 }}>******</Text> : <Text style={{ fontSize: 12, color: 'white', marginRight: 4 }}>{user.password}</Text>}

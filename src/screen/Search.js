@@ -7,6 +7,7 @@ import Series from '../component/Series';
 import Center from '../component/Center';
 import Category from './Category';
 import { useNavigation } from '@react-navigation/native';
+import SeriesVideo from './SeriesVideo';
 
 const Stack = createStackNavigator()
 
@@ -42,33 +43,29 @@ const Search = () => {
             </View>
           </View> 
           <View style={{ backgroundColor: 'white', marginTop: 10, padding: 20, paddingRight: 5}}>
-              <Text style={{ fontSize: 22, fontWeight: "700" }}>Madagascar Series</Text>
-              <Series series="Madagascar series" />
-          </View> 
-          <View style={{ backgroundColor: 'white', marginTop: 10, padding: 20, paddingRight: 5}}>
-              <Text style={{ fontSize: 22, fontWeight: "700" }}>Ted movies clips</Text>
               <Series series="Ted" />
           </View>
           <View style={{ backgroundColor: 'white', marginTop: 10, padding: 20,  paddingRight: 5}}>
-              <Text style={{ fontSize: 22, fontWeight: "700" }}>Expedia channel</Text>
               <Series series="Expedia" />
           </View>
           <View style={{ backgroundColor: 'white', marginTop: 10, padding: 20,  paddingRight: 5}}>
-              <Text style={{ fontSize: 22, fontWeight: "700" }}>Football</Text>
               <Series series="Football" />
           </View>
           <View style={{ backgroundColor: 'white', marginTop: 10, padding: 20,  paddingRight: 5}}>
-              <Text style={{ fontSize: 22, fontWeight: "700" }}>Charlie Brown</Text>
               <Series series="Charlie Brown" />
           </View>
           <View style={{ backgroundColor: 'white', marginTop: 10, padding: 20,  paddingRight: 5}}>
-              <Text style={{ fontSize: 22, fontWeight: "700" }}>Family Guy</Text>
               <Series series="Family Guy" />
           </View>
           <View style={{ backgroundColor: 'white', marginTop: 10, padding: 20,  paddingRight: 5}}>
-              <Text style={{ fontSize: 22, fontWeight: "700" }}>Now You See Me</Text>
+              <Series series="Friends" />
+          </View>
+          <View style={{ backgroundColor: 'white', marginTop: 10, padding: 20,  paddingRight: 5}}>
               <Series series="Now you see me" />
           </View>
+          <View style={{ backgroundColor: 'white', marginTop: 10, padding: 20, paddingRight: 5}}>
+              <Series series="Madagascar series" />
+          </View> 
          </ScrollView>
         </View>
     )
@@ -79,6 +76,7 @@ export const SearchStack = () => {
         <Stack.Navigator>
             <Stack.Screen name="Search"  options={{ header: () => null }} component={Search} />
             <Stack.Screen name="Category" options={{ header: () => null  }} component={Category} />
+            <Stack.Screen name="Series" options={{ header: () => null }} component={SeriesVideo} />
         </Stack.Navigator>
     )
 }

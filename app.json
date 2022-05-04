@@ -4,7 +4,7 @@
     "slug": "etube",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon1.png",
+    "icon": "./assets/icon2.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -18,14 +18,15 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.elearn.etube"
+      "bundleIdentifier": "com.whatsgraphql",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.etube.elearn"
+      "package": "com.whatsgraphql"
     },
     "web": {
       "favicon": "./assets/favicon.png"

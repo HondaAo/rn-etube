@@ -14,6 +14,7 @@ import Search, { SearchStack } from './screen/Search'
 import User, { UserStack } from './screen/User'
 import VideoPlayer from './screen/VideoPlayer'
 import {VideoHeader} from './screen/Video'
+import Guide from './screen/Guide'
 const Stack = createStackNavigator()
 
 const Tabs = createBottomTabNavigator();
@@ -46,13 +47,17 @@ const Routes = () => {
            {
             !user ? (
             <>
-            <Stack.Navigator initialRouteName="register" screenOptions={{ header: () => null }}>
+            <Stack.Navigator initialRouteName="Guide" screenOptions={{ header: () => null }}>
+                <Stack.Screen name="Guide" component={Guide} />
                 <Stack.Screen name="register" component={Register} />
                 <Stack.Screen name="login" component={Login} />
             </Stack.Navigator>
             </>
             ): (
-              <Stack.Navigator initialRouteName="All Videos"><Stack.Screen name="All Videos" options={{ headerTitle: VideoHeader }} component={videoTabs} /><Stack.Screen name="videoPlayer" options={({ route }) => ({ headerTitle: route.params.title , headerLeft: () => null })} component={VideoPlayer} /></Stack.Navigator>
+              <Stack.Navigator initialRouteName="All Videos">
+                <Stack.Screen name="All Videos" options={{ headerTitle: VideoHeader }} component={videoTabs} />
+                <Stack.Screen name="videoPlayer" options={({ route }) => ({ headerTitle: route.params.title , headerLeft: () => null })} component={VideoPlayer} />
+              </Stack.Navigator>
               // <Tabs.Navigator
               //   screenOptions={({ route }) => ({
               //     tabBarIcon: ({ focused, color, size }) => {

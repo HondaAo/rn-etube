@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,11 +6,8 @@ import {
   View,
   FlatList,
   Animated,
-  TouchableOpacity,
   Dimensions,
-  TouchableWithoutFeedback,
-  AsyncStorage,
-  RefreshControl
+  RefreshControl,
 } from 'react-native';
 import gql from 'graphql-tag';
 import CenterSpinner from '../component/CenterSpinner';
@@ -27,6 +24,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SearchStack } from './Search';
 import { UserStack } from './User';
 import { AntDesign, Ionicons, EvilIcons } from "@expo/vector-icons";
+import { AuthContext } from '../AuthProvider';
 
 export const FETCH_VIDEOS = gql`
  query {
@@ -45,12 +43,15 @@ const Stack = createStackNavigator()
 const Tabs = createBottomTabNavigator();
 const Videos = ({}) => {
   const [ refresh, setRefresh ] = useState(false)
+  const navigation = useNavigation()
   const scrollX = new Animated.Value(0)
   const diffClamp = Animated.diffClamp(scrollX,0,45)
   const translateY = diffClamp.interpolate({
     inputRange:[0,45],
     outputRange:[0,-45]
   })
+  const { guide, setGuide } = useContext(AuthContext)
+  const [ modalVisible, setModalVisible] = useState(false);
   const { data, error, loading } = useQuery(FETCH_VIDEOS)
   if (error) {
     console.error(error);
@@ -62,13 +63,22 @@ const Videos = ({}) => {
   if(data){
   }
   const date = new Date()
-  const today = date.getFullYear() + "-" + 0 + parseInt(date.getMonth() + 1) + "-"+ parseInt(date.getDate())
+  let today;
+  if(date.getDate() < 10){
+    today = date.getFullYear() + "-" + 0 + parseInt(date.getMonth() + 1) + "-"+ 0 + parseInt(date.getDate() - 1)
+  }else{
+    today = date.getFullYear() + "-" + 0 + parseInt(date.getMonth() + 1) + "-"+ parseInt(date.getDate() - 1)
+  }
+  
+  console.log(today)
   const todayVideo = data.listingVideo.filter((video) => {
+    console.log(video.created.slice(0, 10))
     return video.created.slice(0, 10) === today
   })
   const recommendedVideo = data.listingVideo.filter((video) => {
     if(date.getDate() < 7){
-      return video.created.slice(5, 7) === date.getMonth() + 1 || video.created.slice(8, 10) > 26
+      console.log(video.created.slice(5,7))
+      return video.created.slice(5, 7) === "0" + parseInt(date.getMonth() + 1) || video.created.slice(5, 7) === "0" + parseInt(date.getMonth()) && parseInt(video.created.slice(8, 10)) > 26
     }
     return   video.created.slice(8, 10) <= date.getDate() && video.created.slice(8, 10) >= parseInt(date.getDate() - 7)
   })
@@ -84,7 +94,7 @@ const Videos = ({}) => {
       }}
       >
       </Animated.View>
-    <ScrollView 
+    <ScrollView
     refreshControl={
       <RefreshControl
        refreshing={refresh}
@@ -114,7 +124,7 @@ const Videos = ({}) => {
       horizontal={true}
       showsHorizontalScrollIndicator={false}
       style={{ width: Dimensions.get('window').width + 5, flex: 1 }}
-      />
+      /> 
     </View>
     </View>
     </View>

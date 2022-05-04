@@ -8,7 +8,6 @@ import Carousel from 'react-native-snap-carousel';
 import ScriptCard from '../component/ScriptCard';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { AuthContext } from '../AuthProvider';
-import { TouchableHighlight, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 export const FETCH_VIDEO = gql`
  query watchVideo($id: Float!){
@@ -20,6 +19,7 @@ export const FETCH_VIDEO = gql`
      end
      level
      view
+     created
    }
  }
 `
@@ -52,6 +52,7 @@ const onChangeState = (state) => {
     setShowId(0)
   }
 }
+
 const skipTo = async() => {
   const elapsed_sec = await playerRef.current.getCurrentTime()
   if(scripts.length === 5){
@@ -152,15 +153,17 @@ const nextScript = async(direction) => {
                 showClosedCaptions: true,
                 end: data.watchVideo.end,
                 loop: 1,
-                controls: 0
+                controls: 0,
+                cc_lang_pref: 'jpn'
               }}
               playbackRate={playBack}
               onChangeState={onChangeState}
+              
               />
            </View>
            <View style={{ paddingLeft: 20, backgroundColor: '#FFF', marginTop: -19, paddingTop: 10, flex: 2, paddingRight: 20}}>
            <Text style={{
-               fontSize:20,
+               fontSize:18,
                width:Dimensions.get("screen").width - 50,
            }}
            ellipsizeMode="tail"
