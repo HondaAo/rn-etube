@@ -1,49 +1,29 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Image, Text, TouchableOpacity, View, ScrollView, FlatList, SafeAreaView } from 'react-native'
-import CenterSpinner from '../component/CenterSpinner';
-import { useQuery } from 'react-apollo';
-import gql from 'graphql-tag';
 import { useNavigation ,useTheme} from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-export const FETCH_VIDEOS = gql`
- query seriesVideo($series: String!){
-   seriesVideo(series: $series){
-     id
-     title
-     url
-     view
-     script
-     level
-     created
-   }
- }
-`
+import axios from 'axios';
 const Series = ({ series }) => {
+    const [ seriesVideos, setSeriesVideos ] = useState([])
     const navigation = useNavigation()
-    const { data, error, loading } = useQuery(
-        FETCH_VIDEOS,
-        {
-          variables: { series }
-        }
-    );
-    let showFive;
-    if(loading){
-        return (
-            <CenterSpinner />
-        )
+    const getSeriesVideos = async() => {
+      const res = await axios.get(`/api/videos/seires/${series}`)
+      setSeriesVideos(res.data)
     }
+    useEffect(() => {
+      getSeriesVideos()
+    },[])
     return (
     <View style={{ flex: 1 }}>
      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
          <Text style={{ paddingLeft: 10, fontSize: 22 }}>{series}</Text>
-         {data.seriesVideo.length > 4 && <TouchableOpacity onPress={()=>navigation.navigate("Series",{ series: series} )}><Text style={{ paddingRight: 12, color: 'blue'}}>Show All Videos</Text></TouchableOpacity>}
+         {seriesVideos.length > 4 && <TouchableOpacity onPress={()=>navigation.navigate("Series",{ series: series} )}><Text style={{ paddingRight: 12, color: 'blue'}}>Show All Videos</Text></TouchableOpacity>}
      </View>
          <SafeAreaView
          style={{ flexDirection: 'row' }}
           >
-        {data.seriesVideo.length < 5 ? (
+        {seriesVideos.length < 5 ? (
             <FlatList 
-            data={data.seriesVideo}
+            data={seriesVideos}
             keyExtractor={item => item.id}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
@@ -69,8 +49,10 @@ const Series = ({ series }) => {
             />
         ):(
         <>
+        { seriesVideos.length > 0 && 
+        (
             <FlatList 
-            data={data.seriesVideo.slice(0, 4)}
+            data={seriesVideos.slice(0, 4)}
             keyExtractor={item => item.id}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
@@ -94,6 +76,7 @@ const Series = ({ series }) => {
                 )
             }}
             />
+        )}
         </>
         )}
         </SafeAreaView>

@@ -14,7 +14,6 @@ import CenterSpinner from '../component/CenterSpinner';
 import SearchCard from '../component/SearchCard';
 import AllVideo from './AllVideo';
 import { ConfirmDialog } from 'react-native-simple-dialogs';
-import SvgUri from 'react-native-svg-uri';
 import Voca from './Voca';
 
 const Stack = createStackNavigator()

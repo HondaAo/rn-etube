@@ -6,31 +6,6 @@ import { useNavigation } from '@react-navigation/core';
 
 export const AuthContext = React.createContext();
 
-export const LOGIN_USER = gql`
- mutation login($username: String!, $password: String!) {
-    login(input: { username: $username, password: $password }){
-        user {
-            id
-            username
-        }
-    }
- }
-`
-export const REGISTER = gql`
- mutation register($username: String!, $password: String!) {
-   register(username: $username, password: $password) {
-     user {
-         id
-         username
-     }
-     errors {
-         message
-     }
-   }
- }
-`
-
-
 export const AuthProvider = ({children}) => {
     const [ user, setUser ] = useState(null)
     const [ like, setLike ] = useState([])

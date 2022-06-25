@@ -60,9 +60,6 @@ const Search = () => {
           <View style={{ backgroundColor: 'white', marginTop: 10, padding: 20,  paddingRight: 5}}>
               <Series series="Friends" />
           </View>
-          <View style={{ backgroundColor: 'white', marginTop: 10, padding: 20,  paddingRight: 5}}>
-              <Series series="Now you see me" />
-          </View>
           <View style={{ backgroundColor: 'white', marginTop: 10, padding: 20, paddingRight: 5}}>
               <Series series="Madagascar series" />
           </View> 

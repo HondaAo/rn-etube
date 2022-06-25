@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react'
 import { View, Text, Button, TouchableWithoutFeedback, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { AntDesign } from '@expo/vector-icons'; 
 
 const ScriptCard = ({ scripts, subtitle, showId, skipTo , nextScript, play, setPlay}) => {
     useEffect(() => {
-        const interval = setInterval(skipTo, 800); 
+        const interval = setInterval(skipTo, 400); 
         return () => {
           clearInterval(interval);
         };
-      }, []);
+      },[skipTo]);
     if(showId > scripts.length){
        card = scripts[0]
     }
@@ -41,8 +40,8 @@ const ScriptCard = ({ scripts, subtitle, showId, skipTo , nextScript, play, setP
          style={{ marginRight: 10, marginTop: 40, marginLeft: -25 }}
         />   
         )}
-        { subtitle && <TouchableWithoutFeedback onPress={() => setPlay(prev => !prev)} style={{ height: "100%"}}>
-        <Text style={{ textAlign: "left",lineHeight: 28, fontSize: 16, width: "84%", fontWeight: "600"}}>{card.text}</Text>
+        { subtitle && card && <TouchableWithoutFeedback onPress={() => setPlay(prev => !prev)} style={{ height: "100%"}}>
+         <Text style={{ textAlign: "left",lineHeight: 28, fontSize: 16, width: "84%", fontWeight: "600"}}>{' '}{card.text.replaceAll('.', '\n')}</Text>
         </TouchableWithoutFeedback>}
         { showId !== scripts.length - 1  ? (
         <Icon

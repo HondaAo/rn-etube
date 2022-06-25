@@ -25,24 +25,12 @@ import { SearchStack } from './Search';
 import { UserStack } from './User';
 import { AntDesign, Ionicons, EvilIcons } from "@expo/vector-icons";
 import { AuthContext } from '../AuthProvider';
-
-export const FETCH_VIDEOS = gql`
- query {
-   listingVideo {
-     id
-     title
-     url
-     view
-     level
-     script
-     created
-   }
- }
-`
+import axios from 'axios';
 const Stack = createStackNavigator()
 const Tabs = createBottomTabNavigator();
 const Videos = ({}) => {
   const [ refresh, setRefresh ] = useState(false)
+  const [ videos, setVideos ] = useState()
   const navigation = useNavigation()
   const scrollX = new Animated.Value(0)
   const diffClamp = Animated.diffClamp(scrollX,0,45)
@@ -50,38 +38,17 @@ const Videos = ({}) => {
     inputRange:[0,45],
     outputRange:[0,-45]
   })
-  const { guide, setGuide } = useContext(AuthContext)
-  const [ modalVisible, setModalVisible] = useState(false);
-  const { data, error, loading } = useQuery(FETCH_VIDEOS)
-  if (error) {
-    console.error(error);
-    return <Text>Error</Text>;
+  const { guide, setGuide } = useContext(AuthContext);
+  const getVideos = async() => {
+    const res = await axios.get('/api/videos')
+    setVideos(res.data)
+}
+  useEffect(() => {
+    getVideos()
+  },[])
+  if(videos){
+    console.log(videos)
   }
-  if (loading) {
-    return <CenterSpinner />;
-  }
-  if(data){
-  }
-  const date = new Date()
-  let today;
-  if(date.getDate() < 10){
-    today = date.getFullYear() + "-" + 0 + parseInt(date.getMonth() + 1) + "-"+ 0 + parseInt(date.getDate() - 1)
-  }else{
-    today = date.getFullYear() + "-" + 0 + parseInt(date.getMonth() + 1) + "-"+ parseInt(date.getDate() - 1)
-  }
-  
-  console.log(today)
-  const todayVideo = data.listingVideo.filter((video) => {
-    console.log(video.created.slice(0, 10))
-    return video.created.slice(0, 10) === today
-  })
-  const recommendedVideo = data.listingVideo.filter((video) => {
-    if(date.getDate() < 7){
-      console.log(video.created.slice(5,7))
-      return video.created.slice(5, 7) === "0" + parseInt(date.getMonth() + 1) || video.created.slice(5, 7) === "0" + parseInt(date.getMonth()) && parseInt(video.created.slice(8, 10)) > 26
-    }
-    return   video.created.slice(8, 10) <= date.getDate() && video.created.slice(8, 10) >= parseInt(date.getDate() - 7)
-  })
   return (
     <View>
       <Animated.View
@@ -108,8 +75,10 @@ const Videos = ({}) => {
       <Text style={{ color: '#000', marginTop: -5, opacity: 0.3}}>These videos were uploaded today</Text>
     </View>
     <View style={{ flex: 1 }}>
+    { videos && 
+    (
     <FlatList
-       data={todayVideo}
+       data={videos}
        renderItem={({item})=>{
         return( 
         <Today
@@ -125,6 +94,7 @@ const Videos = ({}) => {
       showsHorizontalScrollIndicator={false}
       style={{ width: Dimensions.get('window').width + 5, flex: 1 }}
       /> 
+    )}
     </View>
     </View>
     </View>
@@ -135,7 +105,7 @@ const Videos = ({}) => {
       <Text style={{ color: '#000',opacity: 0.3}}>These videos were uploaded in this week</Text>
     </View>
     <FlatList
-      data={recommendedVideo}
+      data={videos}
       renderItem={({item})=>{
         return <Card
         id={item.id}
